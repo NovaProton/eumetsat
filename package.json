@@ -1,19 +1,16 @@
 {
-  "name": "express-hello-world",
+  "name": "eumetsat-proxy",
   "version": "1.0.0",
-  "description": "Express Hello World on Render",
-  "main": "app.js",
-  "repository": "https://github.com/render-examples/express-hello-world",
-  "author": "Render Developers",
-  "license": "MIT",
-  "private": false,
+  "description": "A simple Node.js proxy for forwarding requests to EUMETSAT WMS",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
   "dependencies": {
-    "express": "^5.0.0"
+    "express": "^4.17.1",
     "request": "^2.88.2"
   },
   "engines": {
-    "node": ">=14.x"}  
+    "node": "14.x"
+  }
 }
