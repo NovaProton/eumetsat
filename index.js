@@ -42,6 +42,24 @@ app.get('/world', async (req, res) => {
     }
 });
 
+// Home route that loads both images
+app.get('/', (req, res) => {
+    res.send(`
+        <html>
+        <head>
+            <title>EUMETSAT Images</title>
+        </head>
+        <body>
+            <h1>EUMETSAT Images</h1>
+            <h2>Local Image</h2>
+            <img src="/local" alt="Local EUMETSAT Image" style="max-width: 100%;">
+            <h2>World Image</h2>
+            <img src="/world" alt="World EUMETSAT Image" style="max-width: 100%;">
+        </body>
+        </html>
+    `);
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
