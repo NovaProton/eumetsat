@@ -73,6 +73,8 @@ app.get('/', (req, res) => {
             <img src="/local" alt="Local EUMETSAT Image" style="max-width: 100%;">
             <h2>World Image</h2>
             <img src="/world" alt="World EUMETSAT Image" style="max-width: 100%;">
+            <br>
+            <p>Source: <a href="https://www.eumetsat.int/">EUMETSAT</a></p>
         </body>
         </html>
     `);
