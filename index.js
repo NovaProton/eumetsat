@@ -1,7 +1,6 @@
-
 const getCurrentHimawariImageUrl = () => {
     const now = new Date();
-    now.setUTCMinutes(Math.floor(now.getUTCMinutes() / 10) * 10);
+    now.setUTCMinutes(Math.floor(now.getUTCMinutes() / 10) * 10); // Always round down to the nearest 10 mins
     now.setUTCSeconds(0);
     now.setUTCMilliseconds(0);
 
