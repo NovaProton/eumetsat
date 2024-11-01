@@ -1,3 +1,22 @@
+
+const getCurrentHimawariImageUrl = () => {
+    const now = new Date();
+    now.setUTCMinutes(Math.floor(now.getUTCMinutes() / 10) * 10);
+    now.setUTCSeconds(0);
+    now.setUTCMilliseconds(0);
+
+    const year = now.getUTCFullYear();
+    const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(now.getUTCDate()).padStart(2, '0');
+    const hour = String(now.getUTCHours()).padStart(2, '0');
+    const minute = String(now.getUTCMinutes()).padStart(2, '0');
+
+    return `https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_${hour}${minute}.jpg`;
+};
+
+const HIMAWARI_URL = getCurrentHimawariImageUrl();
+
+// Existing code here
 const express = require('express');
 const axios = require('axios');
 const app = express();
