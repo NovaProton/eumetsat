@@ -5,19 +5,6 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-function generateImageUrl() {
-    const currentHour = new Date().getUTCHours().toString().padStart(2, '0'); // Hour in UTC
-    // For the rest of the placeholder calculation, assuming you want it at 10-minute intervals (as the placeholder suggests)
-    const minutes = Math.floor(new Date().getUTCMinutes() / 10) * 10;
-    const formattedMinutes = minutes.toString().padStart(2, '0'); // Format as '00', '10', '20', etc.
-
-    const url = `https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_${currentHour}${formattedMinutes}.jpg`;
-
-    return url;
-}
-
-const AusImage = generateImageUrl();
-
 // URLs for the two images
 const LOCAL_EUMETSAT_URL = 'https://view.eumetsat.int/geoserver/wms?service=WMS&version=1.3.0&request=GetMap&TRANSPARENT=True&WIDTH=488&HEIGHT=487&BBOX=-62.8,-15.9,51.9,71.8&FORMAT=image/jpeg&LAYERS=mtg_fd:rgb_geocolour';
 const WORLD_EUMETSAT_URL = 'https://view.eumetsat.int/geoserver/ows?access_token=311845d4-6c48-3832-8bed-546ef3284087&service=WMS&request=GetMap&version=1.3.0&layers=mtg_fd:rgb_geocolour&styles=&format=image/jpeg&crs=EPSG:4326&bbox=-77.3506393432617,-81.2777938842773,77.3563919067383,81.2807235717773&width=800&height=761';
@@ -57,23 +44,6 @@ app.get('/world', async (req, res) => {
         res.status(500).send('Error fetching the world image');
     }
 });
-
-app.get('/aus', async (req, res) => {
-    try {
-        const response = await axios({
-            url: AusImage,
-            method: 'GET',
-            responseType: 'arraybuffer'
-        });
-        
-        res.setHeader('Content-Type', 'image/jpeg');
-        res.send(response.data);
-    } catch (error) {
-        console.error('Error fetching the world image:', error);
-        res.status(500).send('Error fetching the world image');
-    }
-});
-
 
 // Home route that loads both images
 app.get('/', (req, res) => {
