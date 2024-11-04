@@ -1,99 +1,15 @@
-const fs = require('fs');
+function generateImageUrl() {
+    const currentHour = new Date().getUTCHours().toString().padStart(2, '0'); // Hour in UTC
+    // For the rest of the placeholder calculation, assuming you want it at 10-minute intervals (as the placeholder suggests)
+    const minutes = Math.floor(new Date().getUTCMinutes() / 10) * 10;
+    const formattedMinutes = minutes.toString().padStart(2, '0'); // Format as '00', '10', '20', etc.
 
-const getCurrentHimawariImageUrl = () => {
-    const now = new Date();
-    now.setUTCMinutes(now.getUTCMinutes() - 30); // Subtract 30 minutes
-    now.setUTCSeconds(0);
-    now.setUTCMilliseconds(0);
+    const url = `https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_${currentHour}${formattedMinutes}.jpg`;
 
-    // Load the intervals from the UTC10MinIntervals.txt file
-    const intervals = fs.readFileSync('UTC10MinIntervals.txt', 'utf-8')
-        .split('\n')
-        .filter(Boolean);
+    return url;
+}
 
-    // Extract the current hour and minute
-    const currentHour = String(now.getUTCHours()).padStart(2, '0');
-    const currentMinute = String(now.getUTCMinutes()).padStart(2, '0');
-
-    // Find the largest interval less than or equal to the current time
-    let closestInterval = null;
-    for (let interval of intervals) {
-        const [intervalHour, intervalMinute] = interval.split(':');
-        if (
-            intervalHour < currentHour ||
-            (intervalHour === currentHour && intervalMinute <= currentMinute)
-        ) {
-            closestInterval = interval;
-        } else {
-            break; // Stop as soon as we exceed the current time
-        }
-    }
-
-    if (!closestInterval) {
-        // If no closest interval is found, default to the last interval of the previous day
-        closestInterval = intervals[intervals.length - 1];
-    }
-
-    const [hour, minute] = closestInterval.split(':');
-    return `https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_${hour}${minute}.jpg`;
-};
-
-// Set interval to update the URL every 10 minutes
-setInterval(() => {
-    const HIMAWARI_URL = getCurrentHimawariImageUrl();
-    console.log('Updated URL:', HIMAWARI_URL);
-}, 10 * 60 * 1000);
-
-const HIMAWARIWorldimage = () => {
-    const now = new Date();
-    now.setUTCMinutes(now.getUTCMinutes() - 30); // Subtract 30 minutes
-    now.setUTCSeconds(0);
-    now.setUTCMilliseconds(0);
-
-    // Load the intervals from the UTC10MinIntervals.txt file
-    const intervals = fs.readFileSync('UTC10MinIntervals.txt', 'utf-8')
-        .split('\n')
-        .filter(Boolean);
-
-    // Extract the current hour and minute
-    const currentHour = String(now.getUTCHours()).padStart(2, '0');
-    const currentMinute = String(now.getUTCMinutes()).padStart(2, '0');
-
-    // Find the largest interval less than or equal to the current time
-    let closestInterval = null;
-    for (let interval of intervals) {
-        const [intervalHour, intervalMinute] = interval.split(':');
-        if (
-            intervalHour < currentHour ||
-            (intervalHour === currentHour && intervalMinute <= currentMinute)
-        ) {
-            closestInterval = interval;
-        } else {
-            break; // Stop as soon as we exceed the current time
-        }
-    }
-
-    if (!closestInterval) {
-        // If no closest interval is found, default to the last interval of the previous day
-        closestInterval = intervals[intervals.length - 1];
-    }
-
-    const [hour, minute] = closestInterval.split(':');
-    return `https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_${hour}${minute}.jpg`;
-};
-
-// Set interval to update the URL every 10 minutes
-setInterval(() => {
-    const HIMAWARIWorld = HIMAWARIWorldimage();
-    console.log('Updated URL:', HIMAWARIWorld);
-}, 10 * 60 * 1000);
-
-// Existing code here
-const express = require('express');
-const axios = require('axios');
-const app = express();
-
-const PORT = process.env.PORT || 3000;
+const AusImage = generateImageUrl();
 
 // URLs for the two images
 const LOCAL_EUMETSAT_URL = 'https://view.eumetsat.int/geoserver/wms?service=WMS&version=1.3.0&request=GetMap&TRANSPARENT=True&WIDTH=488&HEIGHT=487&BBOX=-62.8,-15.9,51.9,71.8&FORMAT=image/jpeg&LAYERS=mtg_fd:rgb_geocolour';
@@ -138,23 +54,7 @@ app.get('/world', async (req, res) => {
 app.get('/aus', async (req, res) => {
     try {
         const response = await axios({
-            url: HIMAWARI_URL,
-            method: 'GET',
-            responseType: 'arraybuffer'
-        });
-
-        res.setHeader('Content-Type', 'image/jpeg');
-        res.send(response.data);
-    } catch (error) {
-        console.error("Error fetching Himawari-8 image:", error);
-        res.status(500).send("Error fetching Himawari-8 image");
-    }
-});
-
-app.get('/jp', async (req, res) => {
-    try {
-        const response = await axios({
-            url: HIMAWARIWorld,
+            url: AusImage,
             method: 'GET',
             responseType: 'arraybuffer'
         });
