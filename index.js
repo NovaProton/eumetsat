@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const getCurrentHimawariImageUrl = () => {
+const getCurrentHimawariImageUrl = (urlTemplate) => {
     const now = new Date();
     now.setUTCMinutes(now.getUTCMinutes() - 30); // Subtract 30 minutes
     now.setUTCSeconds(0);
@@ -35,16 +35,18 @@ const getCurrentHimawariImageUrl = () => {
     }
 
     const [hour, minute] = closestInterval.split(':');
-    return `https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_${hour}${minute}.jpg`;
+    return urlTemplate.replace('{hour}', hour).replace('{minute}', minute);
 };
 
-// Set interval to update the URL every 10 minutes
+// Set interval to update the URLs every 10 minutes
 setInterval(() => {
-    const HIMAWARI_URL = getCurrentHimawariImageUrl();
-    console.log('Updated URL:', HIMAWARI_URL);
+    const HIMAWARI_URL_1 = getCurrentHimawariImageUrl('https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_{hour}{minute}.jpg');
+    const HIMAWARI_URL_2 = getCurrentHimawariImageUrl('https://www.data.jma.go.jp/mscweb/data/himawari/img/fd_/fd__b13_{hour}{minute}.jpg');
+
+    console.log('Updated URL 1:', HIMAWARI_URL_1);
+    console.log('Updated URL 2:', HIMAWARI_URL_2);
 }, 10 * 60 * 1000);
 
-const HIMAWARI_URL = getCurrentHimawariImageUrl();
 
 // Existing code here
 const express = require('express');
@@ -93,10 +95,26 @@ app.get('/world', async (req, res) => {
     }
 });
 
-app.get('/himawari', async (req, res) => {
+app.get('/aus', async (req, res) => {
     try {
         const response = await axios({
-            url: HIMAWARI_URL,
+            url: HIMAWARI_URL_1,
+            method: 'GET',
+            responseType: 'arraybuffer'
+        });
+
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.send(response.data);
+    } catch (error) {
+        console.error("Error fetching Himawari-8 image:", error);
+        res.status(500).send("Error fetching Himawari-8 image");
+    }
+});
+
+app.get('/worldjp', async (req, res) => {
+    try {
+        const response = await axios({
+            url: HIMAWARI_URL_2,
             method: 'GET',
             responseType: 'arraybuffer'
         });
