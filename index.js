@@ -1,17 +1,48 @@
+const fs = require('fs');
+
 const getCurrentHimawariImageUrl = () => {
     const now = new Date();
-    now.setUTCMinutes(Math.floor(now.getUTCMinutes() / 30) * 30); // Always round down to the nearest 10 mins
+    now.setUTCMinutes(now.getUTCMinutes() - 30); // Subtract 30 minutes
     now.setUTCSeconds(0);
     now.setUTCMilliseconds(0);
 
-    const year = now.getUTCFullYear();
-    const month = String(now.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(now.getUTCDate()).padStart(2, '0');
-    const hour = String(now.getUTCHours()).padStart(2, '0');
-    const minute = String(now.getUTCMinutes()).padStart(2, '0');
+    // Load the intervals from the UTC10MinIntervals.txt file
+    const intervals = fs.readFileSync('UTC10MinIntervals.txt', 'utf-8')
+        .split('\n')
+        .filter(Boolean);
 
+    // Extract the current hour and minute
+    const currentHour = String(now.getUTCHours()).padStart(2, '0');
+    const currentMinute = String(now.getUTCMinutes()).padStart(2, '0');
+
+    // Find the largest interval less than or equal to the current time
+    let closestInterval = null;
+    for (let interval of intervals) {
+        const [intervalHour, intervalMinute] = interval.split(':');
+        if (
+            intervalHour < currentHour ||
+            (intervalHour === currentHour && intervalMinute <= currentMinute)
+        ) {
+            closestInterval = interval;
+        } else {
+            break; // Stop as soon as we exceed the current time
+        }
+    }
+
+    if (!closestInterval) {
+        // If no closest interval is found, default to the last interval of the previous day
+        closestInterval = intervals[intervals.length - 1];
+    }
+
+    const [hour, minute] = closestInterval.split(':');
     return `https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_${hour}${minute}.jpg`;
 };
+
+// Set interval to update the URL every 10 minutes
+setInterval(() => {
+    const HIMAWARI_URL = getCurrentHimawariImageUrl();
+    console.log('Updated URL:', HIMAWARI_URL);
+}, 10 * 60 * 1000);
 
 const HIMAWARI_URL = getCurrentHimawariImageUrl();
 
