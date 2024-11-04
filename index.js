@@ -53,6 +53,9 @@ app.get('/world', async (req, res) => {
 
 app.get('/aus', async (req, res) => {
     try {
+        // Generate the URL each time this endpoint is accessed
+        const AusImage = generateImageUrl();
+
         const response = await axios({
             url: AusImage,
             method: 'GET',
@@ -66,6 +69,7 @@ app.get('/aus', async (req, res) => {
         res.status(500).send("Error fetching Himawari-8 image");
     }
 });
+
 
 // Home route that loads both images
 app.get('/', (req, res) => {
