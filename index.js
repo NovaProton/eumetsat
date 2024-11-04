@@ -1,3 +1,10 @@
+// Existing code here
+const express = require('express');
+const axios = require('axios');
+const app = express();
+
+const PORT = process.env.PORT || 3000;
+
 function generateImageUrl() {
     const currentHour = new Date().getUTCHours().toString().padStart(2, '0'); // Hour in UTC
     // For the rest of the placeholder calculation, assuming you want it at 10-minute intervals (as the placeholder suggests)
@@ -53,20 +60,17 @@ app.get('/world', async (req, res) => {
 
 app.get('/aus', async (req, res) => {
     try {
-        // Generate the URL each time this endpoint is accessed
-        const AusImage = generateImageUrl();
-
         const response = await axios({
             url: AusImage,
             method: 'GET',
             responseType: 'arraybuffer'
         });
-
+        
         res.setHeader('Content-Type', 'image/jpeg');
         res.send(response.data);
     } catch (error) {
-        console.error("Error fetching Himawari-8 image:", error);
-        res.status(500).send("Error fetching Himawari-8 image");
+        console.error('Error fetching the world image:', error);
+        res.status(500).send('Error fetching the world image');
     }
 });
 
