@@ -45,44 +45,6 @@ app.get('/world', async (req, res) => {
     }
 });
 
-app.get('/aus', (req, res) => {
-    res.send(`
-        <html>
-        <head>
-            <title>EUMETSAT Images</title>
-        </head>
-        <body>
-            <h1>Himawari Satellite Image</h1>
-            <script>
-                // Step 1: Function to replace placeholders with actual values
-                function generateImageUrl() {
-                    const currentHour = new Date().getUTCHours().toString().padStart(2, '0'); // Hour in UTC
-                    const minutes = Math.floor(new Date().getUTCMinutes() / 10) * 10;
-                    const formattedMinutes = minutes.toString().padStart(2, '0'); // Format as '00', '10', '20', etc.
-
-                    const url = \`https://www.data.jma.go.jp/mscweb/data/himawari/img/aus/aus_b13_\${currentHour}\${formattedMinutes}.jpg\`;
-
-                    return url;
-                }
-
-                // Step 2: Create an image element and set the src attribute
-                function displayImage() {
-                    const imageUrl = generateImageUrl();
-                    const imgElement = document.createElement('img');
-                    imgElement.src = imageUrl;
-                    imgElement.alt = 'Himawari Satellite Image';
-                    document.body.appendChild(imgElement);
-                }
-
-                // Call the function to display the image when the page loads
-                window.onload = displayImage;
-            </script>
-        </body>
-        </html>
-    `);
-});
-
-
 // Home route that loads both images
 app.get('/', (req, res) => {
     res.send(`
