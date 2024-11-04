@@ -135,10 +135,26 @@ app.get('/world', async (req, res) => {
     }
 });
 
-app.get('/himawari', async (req, res) => {
+app.get('/aus', async (req, res) => {
     try {
         const response = await axios({
             url: HIMAWARI_URL,
+            method: 'GET',
+            responseType: 'arraybuffer'
+        });
+
+        res.setHeader('Content-Type', 'image/jpeg');
+        res.send(response.data);
+    } catch (error) {
+        console.error("Error fetching Himawari-8 image:", error);
+        res.status(500).send("Error fetching Himawari-8 image");
+    }
+});
+
+app.get('/jp', async (req, res) => {
+    try {
+        const response = await axios({
+            url: HIMAWARIWorld,
             method: 'GET',
             responseType: 'arraybuffer'
         });
