@@ -53,7 +53,7 @@ app.get('/aus', (req, res) => {
             <title>EUMETSAT Images</title>
         </head>
         <body>
-            <script src="AusImage.js"></script>
+            <script src="https://raw.githubusercontent.com/NovaProton/eumetsat/refs/heads/main/AusImage.js"></script>
         </body>
         </html>
     `);
