@@ -46,6 +46,20 @@ app.get('/world', async (req, res) => {
 });
 
 // Home route that loads both images
+app.get('/aus', (req, res) => {
+    res.send(`
+        <html>
+        <head>
+            <title>EUMETSAT Images</title>
+        </head>
+        <body>
+            <script src="AusImage.js"></script>
+        </body>
+        </html>
+    `);
+});
+
+// Home route that loads both images
 app.get('/', (req, res) => {
     res.send(`
         <html>
