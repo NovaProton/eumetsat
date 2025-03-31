@@ -7,7 +7,8 @@ const PORT = process.env.PORT || 3000;
 
 // URLs for the two images
 const LOCAL_EUMETSAT_URL = 'https://view.eumetsat.int/geoserver/wms?service=WMS&version=1.3.0&request=GetMap&TRANSPARENT=True&WIDTH=488&HEIGHT=487&BBOX=-62.8,-15.9,51.9,71.8&FORMAT=image/jpeg&LAYERS=mtg_fd:rgb_geocolour';
-const WORLD_EUMETSAT_URL = 'https://view.eumetsat.int/geoserver/ows?access_token=311845d4-6c48-3832-8bed-546ef3284087&service=WMS&request=GetMap&version=1.3.0&layers=mtg_fd:rgb_geocolour&styles=&format=image/jpeg&crs=EPSG:4326&bbox=-77.3506393432617,-81.2777938842773,77.3563919067383,81.2807235717773&width=800&height=761';
+const WORLD_EUMETSAT_URL = 'https://view.eumetsat.int/geoserver/ows?access_token=311845d4-6c48-3832-8bed-546ef3284087&service=WMS&request=GetMap&version=1.3.0&layers=mtg_fd:rgb_geocolour&styles=&format=image/jpeg&crs=EPSG:4326&bbox=-77.3506393432617,-81.2777938842773,77.3563919067383,81.2807235717773&width=500&height=500';
+// const WORLD_EUMETSAT_URL = 'https://view.eumetsat.int/geoserver/ows?access_token=311845d4-6c48-3832-8bed-546ef3284087&service=WMS&request=GetMap&version=1.3.0&layers=mtg_fd:rgb_geocolour&styles=&format=image/jpeg&crs=EPSG:4326&bbox=-77.3506393432617,-81.2777938842773,77.3563919067383,81.2807235717773&width=800&height=761';
 // const HIMAWARI_URL = 'https://www.himawari8.nict.go.jp/img/D531106/latest.jpg'; // Replace with the latest available Himawari URL if needed
 
 
